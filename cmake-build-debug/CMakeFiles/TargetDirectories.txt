@@ -1,0 +1,3 @@
+/home/maximilian/CLionProjects/NovelGrabber/cmake-build-debug/CMakeFiles/NovelGrabber.dir
+/home/maximilian/CLionProjects/NovelGrabber/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/maximilian/CLionProjects/NovelGrabber/cmake-build-debug/CMakeFiles/rebuild_cache.dir

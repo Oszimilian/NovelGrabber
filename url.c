@@ -62,7 +62,7 @@ void extractModifiedURL(NovelGrabber *novelGrabber)
     while(urlElement->str[counter + 1] != ']')
     {
 
-        if (urlElement->str[counter + 1] == '<')
+        if (urlElement->str[counter + 1] == '{')
         {
             localStr[strCounter] = '\0';
             pushElement(novelGrabber->url, createURLElement(localStr, 0));
@@ -70,7 +70,7 @@ void extractModifiedURL(NovelGrabber *novelGrabber)
 
             replaceType = urlElement->str[counter + 2];
 
-            while(urlElement->str[counter] != '>')
+            while(urlElement->str[counter] != '}')
             {
                 counter++;
             }

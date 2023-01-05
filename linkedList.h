@@ -32,5 +32,6 @@ Element *findElementType(List *list, char type);
 void printList(List *list);
 Element *findElementAtIndex(List *list, int index);
 void printListReverse(List *list);
+Element *createFILEElement(char *str, int num);
 
 #endif //NOVELGRABBER_LINKEDLIST_H

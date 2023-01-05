@@ -22,6 +22,14 @@ void downloadFiles(NovelGrabber *novelGrabber, char *cmd)
             printf("%s %s -P %s \n", cmd, generateModifiedAutoURL(novelGrabber, i), novelGrabber->outputDirectory);
         }
     }
+    if (novelGrabber->mode == 'F')
+    {
+        for (int i = novelGrabber->start; i <= novelGrabber->ende; i++)
+        {
+            printf("%s %s -P %s \n", cmd, findElementNumber(novelGrabber->inputTextFileList, i)->str, novelGrabber->outputDirectory );
+        }
+
+    }
 }
 
 

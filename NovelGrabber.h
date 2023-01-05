@@ -13,6 +13,7 @@ struct NovelGrabber
 {
     List *inputList;
     List *url;
+    List *inputTextFileList;
 
     char mode;
 
@@ -21,6 +22,8 @@ struct NovelGrabber
 
     char *outputDirectory;
     char *inputFile;
+
+    FILE *inputTextFile;
 };
 typedef struct NovelGrabber NovelGrabber;
 

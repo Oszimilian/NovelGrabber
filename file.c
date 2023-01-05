@@ -6,6 +6,57 @@
 #include <string.h>
 #include "NovelGrabber.h"
 #include "linkedList.h"
+#include "file.h"
+
+void generateInputTextFileList(NovelGrabber *novelGrabber)
+{
+    novelGrabber->inputTextFile = fopen(novelGrabber->inputFile, "r");
+    if (novelGrabber->inputTextFile == NULL)
+    {
+        fprintf(stderr, "Input Text file konnte nicht geöffnet werden \n");
+        exit(-1);
+    }
+
+    char *str = (char*) malloc(sizeof(char) * 1024);
+    if (str == NULL)
+    {
+        fprintf(stderr, "Hilfsarry für InputTextFile konnte nicht erzeugt werden \n");
+        exit(-1);
+    }
+    str[0] = '\0';
+
+    int strLen;
+    char  *c;
+
+    novelGrabber->inputTextFileList = createList();
+
+    for(int i = 0; i <= novelGrabber->ende; i++)
+    {
+        if (i >= novelGrabber->start)
+        {
+            c = fgets(str, 1024, novelGrabber->inputTextFile);
+            //
+            if (feof(novelGrabber->inputTextFile))
+            {
+                novelGrabber->ende = i;
+            } else {
+                str[strlen(str) - 1] = '\0';
+            }
+
+            pushElement(novelGrabber->inputTextFileList, createURLElement(str, i));
+
+        } else {
+            fgets(str, 1024, novelGrabber->inputTextFile);
+        }
+        str[0] = '\0';
+    }
+
+
+    printf("InputTextFile: \n");
+    printListReverse(novelGrabber->inputTextFileList);
+
+    fclose(novelGrabber->inputTextFile);
+}
 
 void initInputFile(NovelGrabber *novelGrabber)
 {
@@ -23,6 +74,11 @@ void initInputFile(NovelGrabber *novelGrabber)
 
     printf("InputFile: %s \n", novelGrabber->inputFile);
 
+
+    generateInputTextFileList(novelGrabber);
 }
 
-#include "file.h"
+
+
+
+

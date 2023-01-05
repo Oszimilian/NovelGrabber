@@ -19,12 +19,7 @@ int main(int argc, char **argv)
 {
     NovelGrabber *novelGrabber = initNovelGrabber(&argc, argv);
 
-
-
-
-    //printf("\nINPUTLIST: \n");
-    //printListReverse(novelGrabber->inputList);
-
+    printf("\n\n");
     downloadFiles(novelGrabber, "wget");
 
     return EXIT_SUCCESS;

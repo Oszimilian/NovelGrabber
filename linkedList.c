@@ -47,6 +47,23 @@ Element *createURLElement(char *str, int num)
 
 }
 
+Element *createFILEElement(char *str, int num)
+{
+    int strLen = strlen(str);
+    Element *element = (Element*) malloc(sizeof(Element));
+    if (element == NULL) return NULL;
+
+    element->str = (char*)malloc(sizeof(char) * strLen);
+    if (element->str == NULL) return NULL;
+
+    element->type = 't';
+    strcpy(element->str, str);
+    element->num = num;
+    element->next = NULL;
+
+    return element;
+}
+
 List *createList()
 {
     List *list = (List*) malloc(sizeof(List));

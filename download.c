@@ -13,13 +13,13 @@ void downloadFiles(NovelGrabber *novelGrabber, char *cmd)
 {
     if (novelGrabber->mode == 'M')
     {
-        printf("%s %s -P %s \n", cmd, generateModifiedAutoURL(novelGrabber, 0), novelGrabber->outputDirectory);
+        printf("%s %s -P %s \n", cmd, getIntervallAutoURL(novelGrabber, 0), novelGrabber->outputDirectory);
     }
     if (novelGrabber->mode == 'A')
     {
         for (int i = novelGrabber->start; i <= novelGrabber->ende; i++)
         {
-            printf("%s %s -P %s \n", cmd, generateModifiedAutoURL(novelGrabber, i), novelGrabber->outputDirectory);
+            printf("%s %s -P %s \n", cmd, getIntervallAutoURL(novelGrabber, i), novelGrabber->outputDirectory);
         }
     }
     if (novelGrabber->mode == 'F')

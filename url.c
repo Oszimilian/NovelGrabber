@@ -9,117 +9,85 @@
 #include "linkedList.h"
 #include "url.h"
 
+void handleURLConflict(void *input)
+{
+    if (input == NULL)
+    {
+        fprintf(stderr, "FAIL in building the URL! \n");
+        exit(-1);
+    }
+}
 
+
+/*
+ *  This function extracts the normal URL from the []-brackets and stores the url in the linked list
+ */
 void extractNormalURL(NovelGrabber *novelGrabber)
 {
     Element *urlElement = findElementType(novelGrabber->inputList, 'u');
-    if (urlElement == NULL)
-    {
-        fprintf(stderr, "URL is missing or not specified \n");
-        exit(-1);
-    }
+    handleURLConflict(urlElement);
 
-    int strLen = strlen(urlElement->str);
+    char *token;
 
-    char *localStr = (char*) malloc(sizeof(char) * strLen);
+    //Start afeter the [-Bracket and loop till the ]-Bracket is reached
+    token = strtok(&urlElement->str[1], "]");
 
-    for (int i = 0; i < (strLen - 2); i++)
-    {
-        localStr[i] = urlElement->str[i + 1];
-    }
-
-    printf("URL: %s \n", localStr);
-
-    pushElement(novelGrabber->url, createURLElement(localStr, strLen));
-
-    free(localStr);
-
+    pushElement(novelGrabber->url, createURLElement(token, 0));
 }
 
+
+/*
+ *  This function seperates the url-input into to url-strings and the {i}-Marker for replacing
+ */
 void extractModifiedURL(NovelGrabber *novelGrabber)
 {
-    int counter = 0;
-    int strCounter = 0;
-    int strLen = 0;
-    char replaceType = 0;
-
-    Element *localElement = NULL;
-
     Element *urlElement = findElementType(novelGrabber->inputList, 'u');
-    if (urlElement == NULL)
-    {
-        fprintf(stderr, "URL is missing or not specified \n");
-        exit(-1);
-    }
+    handleURLConflict(urlElement);
 
+    char *token = NULL;
+    int strLen = 0;
 
+    //Start after the '[' character and go till the {i}-Marker is reached and store this part of the url
+    token = strtok(&urlElement->str[1], "{");
+    handleURLConflict(token);
+    strLen = 4 + strlen(token);
+    pushElement(novelGrabber->url, createURLElement(token, 0));
 
-    strLen = strlen(urlElement->str);
-    char *localStr = (char*) malloc(sizeof(char) * strLen);
+    //Create a List element to signal that this part will be replaced by a integer
+    Element *element = createURLElement("", 0);
+    element->type = 'i';
+    pushElement(novelGrabber->url, element);
 
-    printf("URL: %s \n", strtok(&urlElement->str[1], "]"));
+    //Start after the {i}-Marker and go till the end of the url is reached. Store this part of the url in the list too.
+    token = strtok(&urlElement->str[strLen], "]");
+    handleURLConflict(token);
+    pushElement(novelGrabber->url, createURLElement(token, 0));
 
-    while(urlElement->str[counter + 1] != ']')
-    {
-
-        if (urlElement->str[counter + 1] == '{')
-        {
-            localStr[strCounter] = '\0';
-            pushElement(novelGrabber->url, createURLElement(localStr, 0));
-            strCounter = 0;
-
-            replaceType = urlElement->str[counter + 2];
-
-            while(urlElement->str[counter] != '}')
-            {
-                counter++;
-            }
-            localElement = createURLElement("--", 0);
-            localElement->type = replaceType;
-
-            pushElement(novelGrabber->url, localElement);
-
-        }
-
-        if (urlElement->str[counter + 1] == ']') break;
-
-        localStr[strCounter] = urlElement->str[counter + 1];
-
-
-        strCounter++;
-        counter++;
-    }
-
-    localStr[strCounter] = '\0';
-    pushElement(novelGrabber->url, createURLElement(localStr, 0));
-
-    free(localStr);
 }
 
-char *generateModifiedAutoURL(NovelGrabber *novelGrabber, int i)
+/*
+ *  This funktion returns a pointer to a string which contains the modified URL.
+ *  With the variable num you can tell the funktion
+ */
+char *getIntervallAutoURL(NovelGrabber *novelGrabber, int num)
 {
-    static char url[512];
-    for (int i = 0; i < 512; i++) url[i] = 0;
-    static char number[128];
-    for (int i = 0; i < 512; i++) number[i] = 0;
+    static char url[1024];
+    for (int i = 0; i < 1024; i++) url[i] = 0;
 
-    sprintf(number, "%d", i);
+    Element *firstElement = findElementAtIndex(novelGrabber->url, 2);
+    Element *lastElement = findElementAtIndex(novelGrabber->url, 0);
 
-    Element *element = novelGrabber->url;
+    handleURLConflict(firstElement);
+    handleURLConflict(lastElement);
 
-    for (int i = novelGrabber->url->leangh - 1; i >= 0; i--)
+    if (firstElement->type != 'u' || lastElement->type != 'u')
     {
-        element = findElementAtIndex(novelGrabber->url, i);
-
-        if (element->type == 'u')
-        {
-            strcat(url, element->str);
-        }
-        else if (element->type == 'i')
-        {
-            strcat(url, number);
-        }
+        handleURLConflict(NULL);
     }
+
+    sprintf(url, "%s%d%s", firstElement->str, num, lastElement->str);
 
     return url;
 }
+
+

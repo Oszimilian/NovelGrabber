@@ -9,6 +9,6 @@
 
 void extractModifiedURL(NovelGrabber *novelGrabber);
 void extractNormalURL(NovelGrabber *novelGrabber);
-char *generateModifiedAutoURL(NovelGrabber *novelGrabber, int i);
+char *getIntervallAutoURL(NovelGrabber *novelGrabber, int num);
 
 #endif //NOVELGRABBER_URL_H

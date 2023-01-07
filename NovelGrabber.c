@@ -13,10 +13,19 @@
 #include "directory.h"
 #include "file.h"
 
+void handleNovelGrabberError(void *input)
+{
+    if (input == NULL)
+    {
+        fprintf(stderr, "Error in Starting the NovelGrabber! \n");
+        exit(-1);
+    }
+}
+
 NovelGrabber *initNovelGrabber(int *argc, int **argv)
 {
     NovelGrabber *novelGrabber = (NovelGrabber*) malloc(sizeof(NovelGrabber));
-    if (novelGrabber == NULL) return NULL;
+    handleNovelGrabberError(novelGrabber);
 
     novelGrabber->inputList = createList();
     novelGrabber->url = createList();

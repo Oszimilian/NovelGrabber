@@ -7,11 +7,11 @@
 #include "input.h"
 #include "linkedList.h"
 
-void fillLinkedListFromInput(List *inputList, int *argc, char **argv)
+void fillLinkedListFromInput(List *input_list, int *argc, char **argv)
 {
     for (int i = 1; i < *argc; i++)
     {
-        pushElement(inputList, createElement(argv[i], 0));
+        pushElement(input_list, createElement(argv[i], 0));
     }
 }
 

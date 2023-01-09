@@ -7,6 +7,6 @@
 
 #include "linkedList.h"
 
-void fillLinkedListFromInput(List *inputList, int *argc, char **argv);
+void fillLinkedListFromInput(List *input_list, int *argc, char **argv);
 
 #endif //NOVELGRABBER_INPUT_H

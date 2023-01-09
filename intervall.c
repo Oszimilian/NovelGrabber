@@ -10,21 +10,22 @@
 #include "url.h"
 #include "input.h"
 
+void handleIntervallPointsError(void *input)
+{
+    if (input == NULL)
+    {
+        fprintf(stderr, "Error in setting up the intervallpoints! \n");
+        exit(-1);
+    }
+}
+
 void setIntervallPoints(NovelGrabber *novelGrabber)
 {
-    Element *startElement = findElementType(novelGrabber->inputList, 's');
-    if (startElement == NULL)
-    {
-        fprintf(stderr, "startpoint is missing \n");
-        exit(-1);
-    }
+    Element *startElement = findElementType(novelGrabber->input_list, 's');
+    handleIntervallPointsError(startElement);
 
-    Element *endeElement = findElementType(novelGrabber->inputList, 'e');
-    if (endeElement == NULL)
-    {
-        fprintf(stderr, "endpoint is missing \n");
-        exit(-1);
-    }
+    Element *endeElement = findElementType(novelGrabber->input_list, 'e');
+    handleIntervallPointsError(endeElement);
 
     novelGrabber->start = atoi(&startElement->str[1]);
     novelGrabber->ende = atoi(&endeElement->str[1]);

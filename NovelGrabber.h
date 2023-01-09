@@ -11,9 +11,9 @@
 
 struct NovelGrabber
 {
-    List *inputList;
-    List *url;
-    List *inputTextFileList;
+    List *input_list;
+    List *url_list;
+    List *inputTextFile_list;
 
     char mode;
 
@@ -21,7 +21,9 @@ struct NovelGrabber
     int ende;
 
     char *outputDirectory;
+
     char *inputFile;
+    char *outputFile;
 
     FILE *inputTextFile;
 };

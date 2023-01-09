@@ -8,5 +8,6 @@
 #include "NovelGrabber.h"
 
 void initInputFile(NovelGrabber *novelGrabber);
+char *getIntervallFileURL(NovelGrabber *novelGrabber, int num);
 
 #endif //NOVELGRABBER_FILE_H

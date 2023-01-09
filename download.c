@@ -8,12 +8,13 @@
 #include "NovelGrabber.h"
 #include "linkedList.h"
 #include "url.h"
+#include "file.h"
 
 void downloadFiles(NovelGrabber *novelGrabber, char *cmd)
 {
     if (novelGrabber->mode == 'M')
     {
-        printf("%s %s -P %s \n", cmd, getIntervallAutoURL(novelGrabber, 0), novelGrabber->outputDirectory);
+        printf("%s %s -P %s \n", cmd, getManuURL(novelGrabber), novelGrabber->outputDirectory);
     }
     if (novelGrabber->mode == 'A')
     {
@@ -26,7 +27,7 @@ void downloadFiles(NovelGrabber *novelGrabber, char *cmd)
     {
         for (int i = novelGrabber->start; i <= novelGrabber->ende; i++)
         {
-            printf("%s %s -P %s \n", cmd, findElementNumber(novelGrabber->inputTextFileList, i)->str, novelGrabber->outputDirectory );
+            printf("%s %s -P %s \n", cmd, getIntervallFileURL(novelGrabber, i), novelGrabber->outputDirectory );
         }
 
     }

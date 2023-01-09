@@ -22,17 +22,32 @@ void handleNovelGrabberError(void *input)
     }
 }
 
+/*
+ *      This function is responsible for initialising the NovelGrabber
+ *      -> Create a NovelGrabber-Data-Structure
+ *      -> Create a Linked-List where al input of this program is stored
+ *      -> Create a Linked-List where the URL is partly stored together with the replace-patterns
+ *      -> Create a Linked-List where the hole input for the Inputfile is stored line by line
+ *      -> Set the globle mode in the NovelGrabber-Structure
+ *      -> Set the Output-Directory where the downloaded files are stored
+ *
+ *      ->Start the programm debended on the mode
+ */
 NovelGrabber *initNovelGrabber(int *argc, int **argv)
 {
     NovelGrabber *novelGrabber = (NovelGrabber*) malloc(sizeof(NovelGrabber));
     handleNovelGrabberError(novelGrabber);
 
-    novelGrabber->inputList = createList();
-    novelGrabber->url = createList();
-    fillLinkedListFromInput(novelGrabber->inputList, argc, argv);
-    novelGrabber->inputFile = NULL;
+    novelGrabber->input_list = createList();
+    novelGrabber->url_list = createList();
+    novelGrabber->inputTextFile_list = createList();
 
-    //Handle Input
+
+    novelGrabber->inputFile = NULL;
+    novelGrabber->outputFile = NULL;
+
+    fillLinkedListFromInput(novelGrabber->input_list, argc, argv);
+
 
     setNovelGrabberMode(novelGrabber);
     initOutputDirectory(novelGrabber);
@@ -45,12 +60,8 @@ NovelGrabber *initNovelGrabber(int *argc, int **argv)
 
 void setNovelGrabberMode(NovelGrabber *novelGrabber)
 {
-    Element *modeElement = findElementType(novelGrabber->inputList, 'm');
-    if (modeElement == NULL)
-    {
-        fprintf(stderr, "Mode is missing \n");
-        exit(-1);
-    }
+    Element *modeElement = findElementType(novelGrabber->input_list, 'm');
+    handleNovelGrabberError(modeElement);
 
     if (strcmp(modeElement->str, "[MANU]") == 0)
     {
@@ -68,7 +79,6 @@ void setNovelGrabberMode(NovelGrabber *novelGrabber)
 
 void handleNovelGrabber(NovelGrabber *novelGrabber)
 {
-
     switch (novelGrabber->mode)
     {
         case 'M':   extractNormalURL(novelGrabber);
@@ -92,5 +102,4 @@ void handleNovelGrabber(NovelGrabber *novelGrabber)
         default:    break;
     }
 
-    //printListReverse(novelGrabber->url);
 }

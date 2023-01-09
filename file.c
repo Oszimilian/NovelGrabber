@@ -8,74 +8,80 @@
 #include "linkedList.h"
 #include "file.h"
 
+void handleInputTextFileError(void *input)
+{
+    if (input == NULL)
+    {
+        fprintf(stderr, "Error in opening or editing the inputfile! \n");
+        exit(-1);
+    }
+}
+
 void generateInputTextFileList(NovelGrabber *novelGrabber)
 {
     novelGrabber->inputTextFile = fopen(novelGrabber->inputFile, "r");
-    if (novelGrabber->inputTextFile == NULL)
-    {
-        fprintf(stderr, "Input Text file konnte nicht geöffnet werden \n");
-        exit(-1);
-    }
+    handleInputTextFileError(novelGrabber->inputTextFile);
+
+    char *token = NULL;
 
     char *str = (char*) malloc(sizeof(char) * 1024);
-    if (str == NULL)
+    handleInputTextFileError(str);
+
+    int counter = 0;
+
+    do
     {
-        fprintf(stderr, "Hilfsarry für InputTextFile konnte nicht erzeugt werden \n");
-        exit(-1);
-    }
-    str[0] = '\0';
-
-    int strLen;
-    char  *c;
-
-    novelGrabber->inputTextFileList = createList();
-
-    for(int i = 0; i <= novelGrabber->ende; i++)
-    {
-        if (i >= novelGrabber->start)
+        if (counter >= novelGrabber->start)
         {
-            c = fgets(str, 1024, novelGrabber->inputTextFile);
-            //
-            if (feof(novelGrabber->inputTextFile))
-            {
-                novelGrabber->ende = i;
-            } else {
-                str[strlen(str) - 1] = '\0';
-            }
-
-            pushElement(novelGrabber->inputTextFileList, createURLElement(str, i));
-
+            fgets(str, 1024, novelGrabber->inputTextFile);
+            token = strtok(str, "\n");
+            pushElement(novelGrabber->inputTextFile_list, createURLElement(token, counter));
         } else {
             fgets(str, 1024, novelGrabber->inputTextFile);
         }
-        str[0] = '\0';
-    }
 
-
-    printf("InputTextFile: \n");
-    printListReverse(novelGrabber->inputTextFileList);
+    }while(feof(novelGrabber->inputTextFile) != 1 || ++counter < novelGrabber->ende);
 
     fclose(novelGrabber->inputTextFile);
+    free(str);
 }
 
 void initInputFile(NovelGrabber *novelGrabber)
 {
-    Element *element = findElementType(novelGrabber->inputList, 'f');
-    if (element == NULL)
-    {
-        fprintf(stderr, "Es wurde kein Inputfile Verzeichnis angegeben \n");
-        exit(-1);
-    }
+    Element *element = findElementType(novelGrabber->input_list, 'f');
+    handleInputTextFileError(element);
 
-    int strLen = strlen(element->str);
-    novelGrabber->inputFile = (char*) malloc(sizeof(char) * strLen);
-    strcpy(novelGrabber->inputFile, &element->str[1]);
-    novelGrabber->inputFile[strLen - 2] = '\0';
+    char *token = NULL;
+    token = strtok(&element->str[1], "]");
+    novelGrabber->inputFile = (char*) malloc(sizeof(char) * 1024);
+    strcpy(novelGrabber->inputFile, token);
 
     printf("InputFile: %s \n", novelGrabber->inputFile);
 
-
     generateInputTextFileList(novelGrabber);
+}
+
+char *getIntervallFileURL(NovelGrabber *novelGrabber, int num)
+{
+    static char url_list[1024];
+    for (int i = 0; i < 1024; i++) url_list[i] = 0;
+
+    Element *firstElement = findElementAtIndex(novelGrabber->url_list, 2);
+    Element *lastElement = findElementAtIndex(novelGrabber->url_list, 0);
+    Element *fileElement = findElementAtIndex(novelGrabber->inputTextFile_list, num);
+
+    handleInputTextFileError(firstElement);
+    handleInputTextFileError(lastElement);
+    handleInputTextFileError(fileElement);
+
+    if (firstElement->type != 'u' || lastElement->type != 'u')
+    {
+        handleInputTextFileError(NULL);
+    }
+
+    sprintf(url_list, "%s%s%s", firstElement->str, fileElement->str, lastElement->str);
+
+    return url_list;
 }
 
 
